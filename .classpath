@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/gson-2.8.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jgoodies-common-1.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jgoodies-looks-2.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/pdfbox-app-3.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/ucanaccess-5.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/itextpdf-5.5.13.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/json-20140107.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/hsqldb-2.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/jackcess-3.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
