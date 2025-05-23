@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+    <usuario>
+        <id>1</id>
+        <nombre_usuario>Admin</nombre_usuario>
+        <contraseña>admin123</contraseña>
+        <rol>Administrador</rol>
+    </usuario>
+    <usuario>
+        <id>3</id>
+        <nombre_usuario>CajeroPrueba</nombre_usuario>
+        <contraseña>prueba1</contraseña>
+        <rol>Cajero</rol>
+    </usuario>
+</usuarios>

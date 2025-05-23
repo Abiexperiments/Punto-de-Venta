@@ -5,12 +5,9 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.ui.RectangleEdge;
-
-import ClasesBD.VentasDAOReportes;
-
+import Modelo.BaseDatos;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
@@ -20,7 +17,7 @@ public class VistaReportes extends JPanel {
     private JLabel lblTotalVentas;
 // agregar botones para imprimir cada uno de los reportes
     
-    public VistaReportes(VentasDAOReportes ventasDAO) throws SQLException {
+    public VistaReportes(BaseDatos ventasgrafica) throws SQLException {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Reportes de Ventas"));
 
@@ -31,31 +28,31 @@ public class VistaReportes extends JPanel {
         JTabbedPane pestañas = new JTabbedPane();
 
         // Gráfico de pastel: Métodos de pago
-        JFreeChart graficoPastel = crearGraficoPastel(ventasDAO.obtenerVentasPorMetodoPago());
+        JFreeChart graficoPastel = crearGraficoPastel(ventasgrafica.obtenerVentasPorMetodoPagoGrafica());
         ChartPanel panelPie = new ChartPanel(graficoPastel);
         panelPie.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // padding
         pestañas.addTab("Métodos de Pago", null, panelPie, "Distribución de ventas por forma de pago");
 
         // Gráfico de barras: Ventas por fecha
-        JFreeChart graficoBarras = crearGraficoBarras(ventasDAO.obtenerVentasPorFecha());
+        JFreeChart graficoBarras = crearGraficoBarras(ventasgrafica.obtenerVentasPorFechaGrafica());
         ChartPanel panelBarras = new ChartPanel(graficoBarras);
         panelBarras.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // padding
         pestañas.addTab("Ventas por Día", null, panelBarras, "Ventas totales por fecha");
 
      // Gráfico de barras: Ventas por Mes
-     JFreeChart graficoMes = crearGraficoBarras(ventasDAO.obtenerVentasPorMes());
+     JFreeChart graficoMes = crearGraficoBarras(ventasgrafica.obtenerVentasPorMesGrafica());
      ChartPanel panelMes = new ChartPanel(graficoMes);
      panelMes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
      pestañas.addTab("Ventas por Mes", null, panelMes, "Ventas mensuales agrupadas");
 
      // Gráfico de barras: Ventas por Semana
-     JFreeChart graficoSemana = crearGraficoBarras(ventasDAO.obtenerVentasPorSemana());
+     JFreeChart graficoSemana = crearGraficoBarras(ventasgrafica.obtenerVentasPorSemanaGrafica());
      ChartPanel panelSemana = new ChartPanel(graficoSemana);
      panelSemana.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
      pestañas.addTab("Ventas por Semana", null, panelSemana, "Ventas semanales agrupadas");
 
      // Gráfico de barras: Ventas por Año
-     JFreeChart graficoAnio = crearGraficoBarras(ventasDAO.obtenerVentasPorAño());
+     JFreeChart graficoAnio = crearGraficoBarras(ventasgrafica.obtenerVentasPorAñoGrafica());
      ChartPanel panelAnio = new ChartPanel(graficoAnio);
      panelAnio.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
      pestañas.addTab("Ventas por Año", null, panelAnio, "Ventas anuales agrupadas");
@@ -76,7 +73,7 @@ public class VistaReportes extends JPanel {
         add(lblTotalVentas, BorderLayout.SOUTH);
 
         // Mostrar valor real
-        double total = ventasDAO.obtenerTotalVentas();
+        double total = ventasgrafica.obtenerTotalVentasGrafica();
         lblTotalVentas.setText(String.format("Total de ventas: $%.2f", total));
         EstiloGlobalColor.aplicarEstilo(this); // si extiende de JPanel
     }

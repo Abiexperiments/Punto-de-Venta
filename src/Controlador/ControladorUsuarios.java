@@ -11,15 +11,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import ClasesBD.UsuarioDAO;
-import Modelo.ConexionBD;
-
+import Modelo.BaseDatos;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,15 +24,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 public class ControladorUsuarios implements ActionListener {
 
@@ -139,7 +129,7 @@ public class ControladorUsuarios implements ActionListener {
         }
     }
     private void agregarUsuario(String nombre, String contraseña, String rol) {
-        if (UsuarioDAO.agregarUsuario(nombre, contraseña, rol)) {
+        if (BaseDatos.agregarUsuario(nombre, contraseña, rol)) {
             JOptionPane.showMessageDialog(null, "Usuario agregado exitosamente.");
             cargarUsuarios();
         } else {
@@ -151,14 +141,14 @@ public class ControladorUsuarios implements ActionListener {
     private void cargarUsuarios() {
         modelo.setRowCount(0); // Limpia la tabla
 
-        List<Object[]> usuarios = UsuarioDAO.obtenerUsuarios();
+        List<Object[]> usuarios = BaseDatos.obtenerUsuarios();
         for (Object[] fila : usuarios) {
             modelo.addRow(fila);
         }
     }
 
     private void modificarUsuario(int id, String nombre, String contraseña, String rol) {
-        if (UsuarioDAO.modificarUsuario(id, nombre, contraseña, rol)) {
+        if (BaseDatos.modificarUsuario(id, nombre, contraseña, rol)) {
             JOptionPane.showMessageDialog(null, "Usuario actualizado.");
             cargarUsuarios();
         } else {
@@ -166,7 +156,7 @@ public class ControladorUsuarios implements ActionListener {
         }
     }
     private void eliminarUsuario(int idUsuario) {
-        if (UsuarioDAO.eliminarUsuario(idUsuario)) {
+        if (BaseDatos.eliminarUsuario(idUsuario)) {
             JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente.");
             cargarUsuarios();
         } else {

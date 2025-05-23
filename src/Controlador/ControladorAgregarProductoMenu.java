@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+
+import Modelo.BaseDatos;
 import Modelo.ProductosMenu;
-import ClasesBD.ModeloProductosMenuDAO;
 import Patrones.Factory.ProductoMenuFactory;
 import Vista.VistaAgregarProductoMenu;
 import Vista.VistaMenuGeneralMejorada;
@@ -76,7 +77,7 @@ public class ControladorAgregarProductoMenu {
         	ProductosMenu nuevoProducto = ProductoMenuFactory.crearProducto(nombre, precioStr, categoria, rutaImagen);
 
             // Guardar en base de datos
-            ModeloProductosMenuDAO.insertarProducto(nuevoProducto);
+           BaseDatos.insertarProductoMenu(nuevoProducto);
 
             // Refrescar vista del menú desde base de datos
             actualizarListasDesdeBD();
@@ -93,9 +94,9 @@ public class ControladorAgregarProductoMenu {
         bebidas.clear();
         postres.clear();
 
-        platillos.addAll(ModeloProductosMenuDAO.obtenerProductosPorCategoria("Platillo"));
-        bebidas.addAll(ModeloProductosMenuDAO.obtenerProductosPorCategoria("Bebida"));
-        postres.addAll(ModeloProductosMenuDAO.obtenerProductosPorCategoria("Postre"));
+        platillos.addAll(BaseDatos.obtenerProductosPorCategoriaMenu("Platillo"));
+        bebidas.addAll(BaseDatos.obtenerProductosPorCategoriaMenu("Bebida"));
+        postres.addAll(BaseDatos.obtenerProductosPorCategoriaMenu("Postre"));
 
         precios.clear();
         for (ProductosMenu p : platillos) precios.put(p.getNombre(), p.getPrecio());

@@ -17,22 +17,27 @@ public class ProductoMenuRenderer extends JPanel implements ListCellRenderer<Pro
         add(lblTexto, BorderLayout.CENTER);
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
-
     
     @Override
     public Component getListCellRendererComponent(JList<? extends ProductosMenu> list, ProductosMenu producto,
                                                   int index, boolean isSelected, boolean cellHasFocus) {
-        // Texto con nombre y precio
-        lblTexto.setText("<html><b>" + producto.getNombre() + "</b><br>$" + String.format("%.2f", producto.getPrecio()) + "</html>");
+        if (producto == null) {
+            lblTexto.setText("<html><b>Producto inválido</b></html>");
+            lblImagen.setIcon(null);
+            return this;
+        }
+
+        String nombre = (producto.getNombre() != null) ? producto.getNombre() : "Sin nombre";
+        double precio = producto.getPrecio(); // Asumiendo double, no Double
+
+        lblTexto.setText("<html><b>" + nombre + "</b><br>$" + String.format("%.2f", precio) + "</html>");
         lblTexto.setVerticalAlignment(SwingConstants.CENTER);
 
-        // Imagen desde ruta absoluta o relativa
         String ruta = producto.getRutaImagen();
         ImageIcon icono = null;
 
         if (ruta != null && !ruta.isEmpty()) {
             File archivo = new File(ruta);
-
             if (archivo.exists()) {
                 icono = new ImageIcon(ruta);
             } else {
@@ -43,23 +48,24 @@ public class ProductoMenuRenderer extends JPanel implements ListCellRenderer<Pro
             }
         }
 
-        // Si no se pudo cargar una imagen válida, usar imagen por defecto
         if (icono == null) {
-            URL urlDefault = getClass().getClassLoader().getResource("Imagenes/noimagen.jpg");
-            if (urlDefault != null) {
-                icono = new ImageIcon(urlDefault);
+            try {
+                URL urlDefault = getClass().getClassLoader().getResource("Imagenes/noimagen.jpg");
+                if (urlDefault != null) {
+                    icono = new ImageIcon(urlDefault);
+                }
+            } catch (Exception e) {
+                System.err.println("Error cargando imagen por defecto: " + e.getMessage());
             }
         }
 
-        // Escalar la imagen si se pudo cargar
         if (icono != null) {
             Image imagenEscalada = icono.getImage().getScaledInstance(100, 90, Image.SCALE_SMOOTH);
             lblImagen.setIcon(new ImageIcon(imagenEscalada));
         } else {
-            lblImagen.setIcon(null); // En caso extremo
+            lblImagen.setIcon(null);
         }
 
-        // Manejo de selección
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
@@ -71,4 +77,4 @@ public class ProductoMenuRenderer extends JPanel implements ListCellRenderer<Pro
 
         return this;
     }
-} 
+}

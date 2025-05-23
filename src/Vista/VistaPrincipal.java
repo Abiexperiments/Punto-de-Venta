@@ -99,17 +99,14 @@ public class VistaPrincipal extends JFrame {
 		 // 🔹 Aquí agregamos el glue (esto empuja lo que sigue hacia la derecha)
 		    menuBar.add(Box.createHorizontalGlue());
 
-
 lblUsuarioRol = new JLabel("Rol: Invitado"); // ahora es variable de instancia
 lblUsuarioRol.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 lblUsuarioRol.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 menuBar.add(lblUsuarioRol);
-
 		    
 		 // Asignar JMenuBar al JFrame
 		    setJMenuBar(menuBar);
 		}
-
 	public void mostrarPanel(JPanel nuevoPanel) {
 	    panelContenido.removeAll();
 	    panelContenido.add(nuevoPanel, BorderLayout.CENTER);
@@ -123,7 +120,6 @@ menuBar.add(lblUsuarioRol);
 	        System.err.println("Error: Se intentó agregar un componente nulo con el nombre: " + nombre);
 	    }
 	}
-
 
 	public JMenu getInventarioJMenu() {return InventarioJMenu;}
 
@@ -233,15 +229,8 @@ menuBar.add(lblUsuarioRol);
 	
 	public void setVerReportesVentas_JMenuItem(JMenuItem verReportesVentas_JMenuItem) {VerReportesVentas_JMenuItem = verReportesVentas_JMenuItem;}
 
-	public void actualizarRol(String usuario, String rol) {
-	    lblUsuarioRol.setText("Usuario: " + usuario + " | Rol: " + rol);
-	}
-
-	public JMenuItem getReimpresion_JMenuItem() {
-		return Reimpresion_JMenuItem;
-	}
-
-	public void setReimpresion_JMenuItem(JMenuItem reimpresion_JMenuItem) {
-		Reimpresion_JMenuItem = reimpresion_JMenuItem;
-	}
+	public void actualizarRol(String usuario, String rol) {lblUsuarioRol.setText("Usuario: " + usuario + " | Rol: " + rol);}
+	public JMenuItem getReimpresion_JMenuItem() {return Reimpresion_JMenuItem;}
+	
+	public void setReimpresion_JMenuItem(JMenuItem reimpresion_JMenuItem) {Reimpresion_JMenuItem = reimpresion_JMenuItem;}
 }

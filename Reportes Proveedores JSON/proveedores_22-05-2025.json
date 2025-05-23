@@ -1,0 +1,12 @@
+{"proveedores": [{
+    "estado": "Tamaulipas",
+    "tipoProducto": "Abarrotes",
+    "ciudad": "Altamira",
+    "correo": "abarrotessanluis@gmail.com",
+    "calle": "San Lucas",
+    "id": 1,
+    "telefono": "833456234",
+    "nombre": "Abarrotes San Luis",
+    "cp": "09897",
+    "colonia": "Ganadera"
+}]}

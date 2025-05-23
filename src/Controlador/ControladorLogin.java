@@ -1,12 +1,10 @@
 package Controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JOptionPane;
-
+import Modelo.BaseDatos;
 import Modelo.SesionUsuario;
 import Modelo.Usuario;
-import ClasesBD.UsuarioDAO;
 import Vista.VistaLogin;
 import Vista.VistaPrincipal;
 
@@ -28,7 +26,7 @@ public class ControladorLogin {
         String usuario = vista.txtUsuario.getText();
         String contraseña = new String(vista.txtContraseña.getPassword());
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        BaseDatos usuarioDAO = new BaseDatos();
         Usuario user = usuarioDAO.verificarUsuario(usuario, contraseña);
 
         if (user != null) {

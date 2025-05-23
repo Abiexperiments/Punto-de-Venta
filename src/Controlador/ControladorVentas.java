@@ -1,8 +1,8 @@
 package Controlador;
 
+import Modelo.BaseDatos;
 import Modelo.SesionUsuario;
 import Modelo.Venta;
-import ClasesBD.ModeloVentasDAO;
 import Vista.VistaVentas;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -31,7 +31,7 @@ public class ControladorVentas {
 
     public ControladorVentas(VistaVentas vista) {
         this.vista = vista;
-        this.ventasRegistradas = ModeloVentasDAO.obtenerVentas(); // ahora se cargan desde Access
+        this.ventasRegistradas = BaseDatos.obtenerVentas(); // ahora se cargan desde Access
 
         mostrarVentasEnTabla();
 
@@ -39,7 +39,7 @@ public class ControladorVentas {
         vista.getBtnReiniciar().addActionListener(e -> {
         	 vista.getTxtBuscar().setText("");
         	 vista.getTxtBuscar().requestFocus();
-            ventasRegistradas = ModeloVentasDAO.obtenerVentas(); // recargar
+            ventasRegistradas = BaseDatos.obtenerVentas(); // recargar
             mostrarVentasEnTabla();
         });
         vista.getBtnEliminar().addActionListener(e -> eliminarVenta());
@@ -113,7 +113,7 @@ verificarPermisos();
         if (fila != -1) {
             int id = (int) vista.getModeloTabla().getValueAt(fila, 0);
 
-            ModeloVentasDAO.eliminarVentaPorId(id);
+            BaseDatos.eliminarVentaPorId(id);
             ventasRegistradas.removeIf(v -> v.getIdVenta() == id);
 
             mostrarVentasEnTabla();
@@ -199,45 +199,38 @@ verificarPermisos();
             carpeta.mkdirs();
         }
 
-        // Crear nombre dinámico del archivo: ventas_09-05-2025.csv
+        // Crear nombre dinámico del archivo: ventas_21-05-2025.csv
         SimpleDateFormat sdfNombre = new SimpleDateFormat("dd-MM-yyyy");
         String fechaActual = sdfNombre.format(new Date());
         String nombreArchivo = "ventas_" + fechaActual + ".csv";
 
-        // Configurar JFileChooser con carpeta y nombre por defecto
-        JFileChooser fileChooser = new JFileChooser(carpeta);
-        fileChooser.setDialogTitle("Guardar como CSV");
-        fileChooser.setSelectedFile(new File(carpeta, nombreArchivo));
+        // Crear el archivo directamente en la carpeta
+        File archivo = new File(carpeta, nombreArchivo);
 
-        int seleccion = fileChooser.showSaveDialog(vista);
+        try (PrintWriter pw = new PrintWriter(archivo)) {
+            // Escribir encabezados
+            pw.println("ID Venta,Pedidos,Total,Fecha,Metodo de Pago");
 
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File archivo = fileChooser.getSelectedFile();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-            try (PrintWriter pw = new PrintWriter(archivo)) {
-                // Escribir encabezados
-                pw.println("ID Venta,Pedidos,Total,Fecha,Metodo de Pago");
+            for (Venta v : ventasRegistradas) {
+                String id = String.valueOf(v.getIdVenta());
+                String productos = "\"" + String.join(", ", v.getProductos()) + "\""; // evitar problemas con comas
+                String total = String.valueOf(v.getTotal());
+                String fecha = sdf.format(v.getFecha());
+                String metodoPago = v.getMetodoPago() != null ? v.getMetodoPago() : "No especificado";
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
-                for (Venta v : ventasRegistradas) {
-                    String id = String.valueOf(v.getIdVenta());
-                    String productos = "\"" + String.join(", ", v.getProductos()) + "\""; // evitar problemas con comas
-                    String total = String.valueOf(v.getTotal());
-                    String fecha = sdf.format(v.getFecha());
-                    String metodoPago = v.getMetodoPago() != null ? v.getMetodoPago() : "No especificado";
-
-                    pw.printf("%s,%s,%s,%s,%s%n", id, productos, total, fecha, metodoPago);
-                }
-
-                JOptionPane.showMessageDialog(vista, "Ventas exportadas a CSV correctamente en la carpeta 'Reportes Ventas CSV'.");
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(vista, "Error al exportar a CSV.");
-                ex.printStackTrace();
+                pw.printf("%s,%s,%s,%s,%s%n", id, productos, total, fecha, metodoPago);
             }
+
+            JOptionPane.showMessageDialog(vista, "Ventas exportadas a JSON correctamente en la carpeta 'Reportes Ventas CSV'.");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(vista, "Error al exportar a CSV.");
+            ex.printStackTrace();
         }
     }
+
     private void exportarVentasAJSON() {
         // Crear carpeta "Reportes Ventas JSON" si no existe
         File carpeta = new File("Reportes Ventas JSON");

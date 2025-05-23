@@ -1,35 +1,29 @@
 package Controlador;
-
+import Modelo.BaseDatos;
+//arreglarlo con las librerias  
 import Modelo.ItemCarrito;
-import ClasesBD.ModeloProductosMenuDAO;
-import ClasesBD.ModeloVentasDAO;
 import Modelo.ProductosMenu;
 import Modelo.SesionUsuario;
 import Modelo.Venta;
+import Patrones.Observer.ListaObserver;
+import Patrones.Observer.ObserverMenu;
+import Vista.TicketVistaPrevia;
 import Vista.VistaMenuGeneralMejorada;
-
 import javax.swing.*;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import java.awt.Desktop;
-import java.io.BufferedReader;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ControladorVistaMenuGeneralMejorada {
+public class ControladorVistaMenuGeneralMejorada implements ObserverMenu{
 
     private VistaMenuGeneralMejorada vista;
     private Map<String, List<ProductosMenu>> productosPorCategoria;
@@ -41,23 +35,35 @@ public class ControladorVistaMenuGeneralMejorada {
         this.vista = vista;
         this.total = 0.0;
         this.carrito = new ArrayList<>();
+     // Me suscribo como observador
+        ListaObserver.getInstancia().agregarObservador(this);
+
+        // Obtener productos actuales desde el Subject
+        productosPorCategoria = ListaObserver.getInstancia().getProductosPorCategoria();
+        vista.actualizarListas(productosPorCategoria);
 
         // Cargar productos por categoría desde la base
-        List<ProductosMenu> platillos = ModeloProductosMenuDAO.obtenerProductosPorCategoria("Platillo");
-        List<ProductosMenu> bebidas   = ModeloProductosMenuDAO.obtenerProductosPorCategoria("Bebida");
-        List<ProductosMenu> postres   = ModeloProductosMenuDAO.obtenerProductosPorCategoria("Postre");
+        List<ProductosMenu> platillos = BaseDatos.obtenerProductosPorCategoriaMenu("Platillo");
+        List<ProductosMenu> bebidas   = BaseDatos.obtenerProductosPorCategoriaMenu("Bebida");
+        List<ProductosMenu> postres   = BaseDatos.obtenerProductosPorCategoriaMenu("Postre");
 
         productosPorCategoria = new HashMap<>();
         productosPorCategoria.put("Platillo", platillos);
         productosPorCategoria.put("Bebida", bebidas);
         productosPorCategoria.put("Postre", postres);
 
-        vista.actualizarListas(productosPorCategoria); 
+        // Notifica a los observadores del cambio
+        ListaObserver.getInstancia().setProductosPorCategoria(productosPorCategoria);
+
+        vista.actualizarListas(productosPorCategoria);
         agregarListeners();
         verificarPermisos(); 
     }
-
-
+    
+    @Override
+    public void onMenuActualizado(Map<String, List<ProductosMenu>> productosPorCategoria) {
+        vista.actualizarListas(productosPorCategoria);
+    }
     private void agregarListeners() {
         vista.getBotonAgregar().addActionListener(e -> agregarProductoSeleccionado());
         vista.getBotonQuitar().addActionListener(e -> quitarProductoSeleccionado());
@@ -109,7 +115,6 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
     	    actualizarModeloCarrito();
     	    calcularTotal();
     	}
-
     }
 
     private void vaciarCarrito() {
@@ -142,7 +147,6 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
     	for (ItemCarrito item : carrito) {
     	    modelo.addElement(item); // ✅ Agrega el objeto completo, no solo el texto
     	}
-
     }
 
     private void actualizarTotal() {
@@ -162,7 +166,7 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
         ProductosMenu seleccionado = lista.getSelectedValue();
         if (seleccionado != null) {
             // Eliminar por ID
-            boolean eliminadoBD = ModeloProductosMenuDAO.eliminarProductoPorId(seleccionado.getId());
+            boolean eliminadoBD = BaseDatos.eliminarProductoPorIdMenu(seleccionado.getId());
 
             if (eliminadoBD) {
                 // Eliminar solo el producto con ese ID
@@ -186,8 +190,7 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
             vista.getBotonEliminarDelMenu().setEnabled(false); // o setVisible(false)
         }
     }
-
-    
+ 
     private void finalizarPedido() {
         if (carrito.isEmpty()) {
             JOptionPane.showMessageDialog(vista, "El carrito está vacío.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -244,25 +247,6 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
         double subtotal = total / 1.16;
         double iva = total - subtotal;
 
-        // Generar resumen tipo ticket
-        StringBuilder resumen = new StringBuilder("Resumen del Pedido:\n\n");
-        resumen.append(String.format("%-20s %-5s %-10s\n", "Producto", "Cant", "Subtotal"));
-        for (ItemCarrito item : carrito) {
-            resumen.append(String.format("%-20s x%-4d $%.2f\n",
-                    item.getProducto().getNombre(),
-                    item.getCantidad(),
-                    item.getSubtotal()));
-        }
-
-        resumen.append("\n");
-        resumen.append(String.format("Subtotal: $%.2f\n", subtotal));
-        resumen.append(String.format("IVA (16%%): $%.2f\n", iva));
-        resumen.append(String.format("TOTAL:     $%.2f\n", total));
-        resumen.append("Método de Pago: ").append(metodoPago);
-        if (metodoPago.equals("Efectivo")) {
-            resumen.append(String.format("\nCambio:    $%.2f", cambio));
-        }
-
         // Guardar productos vendidos
         List<String> productosVendidos = new ArrayList<>();
         for (ItemCarrito item : carrito) {
@@ -277,115 +261,78 @@ vista.getBotonEliminarDelMenu().addActionListener(e-> eliminarProductoDelMenu())
                 metodoPago
         );
 
-        ModeloVentasDAO.agregarVenta(nuevaVenta);
-        // Opciones después de finalizar pedido
-        Object[] botones = {"Imprimir", "Salir"};
-        int opcion = JOptionPane.showOptionDialog(
-                vista,
-                resumen.toString(),
-                "Pedido Finalizado",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                botones,
-                botones[0]
-        );
+        BaseDatos.agregarVenta(nuevaVenta); //base de datos agregar venta
 
-        if (opcion == 0) {
-            generarPDF(carrito, subtotal, iva, total, metodoPago, cambio);
-        }
+        generarPDF(carrito, subtotal, iva, total, metodoPago, cambio);
 
-        vaciarCarrito();
-
-        JOptionPane.showMessageDialog(vista, resumen.toString(), "Pedido Finalizado", JOptionPane.INFORMATION_MESSAGE);
+        vaciarCarrito(); 
     }
     
     private void generarPDF(List<ItemCarrito> carrito, double subtotal, double iva, double total, String metodoPago, double cambio) {
         try {
-            // 1. Convertir carrito a lista de nombres de productos
             List<String> nombresProductos = carrito.stream()
                     .map(item -> item.getProducto().getNombre())
                     .collect(Collectors.toList());
 
-            // 2. Crear instancia de Venta
             Venta venta = new Venta(0, nombresProductos, total, new Date(), metodoPago);
+            int idVenta = BaseDatos.agregarVentaYObtenerID(venta);
 
-            // 3. Guardar en base de datos y obtener el ID
-            int idVenta = ModeloVentasDAO.agregarVentaYObtenerID(venta);
-
-            // Validación por si falla
             if (idVenta == -1) {
                 JOptionPane.showMessageDialog(null, "Error al guardar la venta en base de datos", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // 4. Crear archivo PDF
             File carpeta = new File("PedidosPDF");
-            if (!carpeta.exists()) {
-                carpeta.mkdir();
-            }
+            if (!carpeta.exists()) carpeta.mkdir();
 
-            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String nombreArchivo = "pedido_" + timestamp + ".pdf";
-            File archivoPDF = new File(carpeta, nombreArchivo);
+            String timestamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
+            File archivoPDF = new File(carpeta, "pedido_" + timestamp + ".pdf");
 
-            // Usamos ID real como número de ticket
-            String ticketID = "Ticket #" + idVenta;
-
-            Document documento = new Document();
+            Document documento = new Document(PageSize.A6); // Más parecido a un ticket pequeño
             PdfWriter.getInstance(documento, new FileOutputStream(archivoPDF));
             documento.open();
 
-            Font fuenteTitulo = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-            Font fuenteNormal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
-            Font fuenteGracias = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLDITALIC, BaseColor.BLUE);
+            Font fuenteTitulo = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
+            Font fuenteNormal = new Font(Font.FontFamily.COURIER, 10, Font.NORMAL);
+            Font fuenteBold = new Font(Font.FontFamily.COURIER, 10, Font.BOLD);
+            Font fuenteGracias = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLDITALIC, BaseColor.BLUE);
 
             documento.add(new Paragraph("La Cocina de Raquel", fuenteTitulo));
+            documento.add(new Paragraph("Ticket #" + idVenta, fuenteNormal));
+
+            String fechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(venta.getFecha());
+            documento.add(new Paragraph("Fecha: " + fechaHora, fuenteNormal));
             documento.add(new Paragraph("----------------------------------------", fuenteNormal));
-
-            String fechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(venta.getFecha());
-            documento.add(new Paragraph(ticketID + "     Fecha: " + fechaHora, fuenteNormal));
-            documento.add(new Paragraph(" "));
-
-            PdfPTable tabla = new PdfPTable(3);
-            tabla.setWidthPercentage(100);
-            tabla.setWidths(new float[]{4, 2, 2});
-
-            tabla.addCell(new PdfPCell(new Phrase("Producto", fuenteNormal)));
-            tabla.addCell(new PdfPCell(new Phrase("Cant", fuenteNormal)));
-            tabla.addCell(new PdfPCell(new Phrase("Subtotal", fuenteNormal)));
 
             for (ItemCarrito item : carrito) {
-                tabla.addCell(new PdfPCell(new Phrase(item.getProducto().getNombre(), fuenteNormal)));
-                tabla.addCell(new PdfPCell(new Phrase("x" + item.getCantidad(), fuenteNormal)));
-                tabla.addCell(new PdfPCell(new Phrase(String.format("$%.2f", item.getSubtotal()), fuenteNormal)));
+                String nombre = item.getProducto().getNombre();
+                int cantidad = item.getCantidad();
+                double precio = item.getSubtotal();
+
+                String linea = String.format("%-20s %2sx %6.2f", nombre.length() > 20 ? nombre.substring(0, 20) : nombre, cantidad, precio);
+                documento.add(new Paragraph(linea, fuenteNormal));
             }
 
-            documento.add(tabla);
-            documento.add(new Paragraph(" "));
-
-            documento.add(new Paragraph(String.format("Subtotal: $%.2f", subtotal), fuenteNormal));
-            documento.add(new Paragraph(String.format("IVA (16%%): $%.2f", iva), fuenteNormal));
-            documento.add(new Paragraph(String.format("TOTAL:     $%.2f", total), fuenteNormal));
-            documento.add(new Paragraph("Método de Pago: " + metodoPago, fuenteNormal));
-            if (metodoPago.equals("Efectivo")) {
-                documento.add(new Paragraph(String.format("Cambio:    $%.2f", cambio), fuenteNormal));
-            }
-
-            documento.add(new Paragraph(" "));
             documento.add(new Paragraph("----------------------------------------", fuenteNormal));
-            Paragraph gracias = new Paragraph("¡Gracias por su compra!", fuenteGracias);
-            gracias.setAlignment(Element.ALIGN_CENTER);
-            documento.add(gracias);
+            documento.add(new Paragraph(String.format("Subtotal:           $%6.2f", subtotal), fuenteBold));
+            documento.add(new Paragraph(String.format("IVA (16%%):          $%6.2f", iva), fuenteBold));
+            documento.add(new Paragraph(String.format("TOTAL:              $%6.2f", total), fuenteBold));
+            documento.add(new Paragraph("Método de Pago: " + metodoPago, fuenteNormal));
+            if (metodoPago.equalsIgnoreCase("Efectivo")) {
+                documento.add(new Paragraph(String.format("Cambio:             $%6.2f", cambio), fuenteBold));
+            }
+
+            documento.add(new Paragraph("\n¡Gracias por su compra!", fuenteGracias));
+            documento.add(new Paragraph("Vuelva pronto", fuenteNormal));
 
             documento.close();
 
-            JOptionPane.showMessageDialog(null, "Ticket generado: " + nombreArchivo, ".PDF", JOptionPane.INFORMATION_MESSAGE);
-            Desktop.getDesktop().open(archivoPDF);
+            Frame frame = JOptionPane.getFrameForComponent(vista);
+            TicketVistaPrevia visor = new TicketVistaPrevia(frame, archivoPDF);
+            visor.setVisible(true);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al generar o abrir PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 }

@@ -3,17 +3,14 @@ package Controlador;
 import Vista.VistaPrincipal;
 import Vista.VistaAgregarProductoMenu;
 import Vista.VistaInventario;
+import Modelo.BaseDatos;
 import Modelo.ProductosMenu;
 import Modelo.SesionUsuario;
-import ClasesBD.VentasDAOReportes;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +85,7 @@ public class ControladorVistaPrincipal implements ActionListener {
         menu.agregarVista("Reimpresion", vistaReimpresion);
 
         try {
-            vistaReportes = new VistaReportes(new VentasDAOReportes());
+            vistaReportes = new VistaReportes(new BaseDatos());
             menu.agregarVista("Reportes", vistaReportes);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -138,8 +135,6 @@ public class ControladorVistaPrincipal implements ActionListener {
         menu.getGestionarVentas_JMenuItem().addActionListener(this);
         menu.getVerReportesVentas_JMenuItem().addActionListener(this);
         menu.getReimpresion_JMenuItem().addActionListener(this);
-
-        
     }
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -181,7 +176,7 @@ public class ControladorVistaPrincipal implements ActionListener {
         }
         menu.mostrarPanel(vistaMenuGeneralMejorada);
     }
-    
+    //jmenu arriba a la derecha roles
     private void configurarPermisos() {
         switch (rol) {
             case "Administrador":

@@ -15,6 +15,7 @@ import javax.swing.JTabbedPane;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import Modelo.ItemCarrito;
@@ -156,19 +157,18 @@ public class VistaMenuGeneralMejorada extends JPanel {
     cargarProductos("Bebida");
     cargarProductos("Postre");
 }
-	
 	public void actualizarListas(Map<String, List<ProductosMenu>> productosPorCategoria) {
 	    DefaultListModel<ProductosMenu> modeloPlatillos = new DefaultListModel<>();
 	    DefaultListModel<ProductosMenu> modeloBebidas = new DefaultListModel<>();
 	    DefaultListModel<ProductosMenu> modeloPostres = new DefaultListModel<>();
 
-	    for (ProductosMenu producto : productosPorCategoria.get("Platillo")) {
+	    for (ProductosMenu producto : productosPorCategoria.getOrDefault("Platillo", Collections.emptyList())) {
 	        modeloPlatillos.addElement(producto);
 	    }
-	    for (ProductosMenu producto : productosPorCategoria.get("Bebida")) {
+	    for (ProductosMenu producto : productosPorCategoria.getOrDefault("Bebida", Collections.emptyList())) {
 	        modeloBebidas.addElement(producto);
 	    }
-	    for (ProductosMenu producto : productosPorCategoria.get("Postre")) {
+	    for (ProductosMenu producto : productosPorCategoria.getOrDefault("Postre", Collections.emptyList())) {
 	        modeloPostres.addElement(producto);
 	    }
 

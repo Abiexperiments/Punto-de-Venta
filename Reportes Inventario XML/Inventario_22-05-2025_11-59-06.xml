@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Inventario>
+    <Producto>
+        <Id>1</Id>
+        <Nombre>Pollo</Nombre>
+        <Cantidad>12</Cantidad>
+        <Categoria>Carnes</Categoria>
+        <UnidadMedida>Kg</UnidadMedida>
+        <FechaRecepcion>09-05-2025</FechaRecepcion>
+        <FechaCaducidad>16-05-2025</FechaCaducidad>
+        <StockMin>20</StockMin>
+        <StockMax>30</StockMax>
+        <Estado>Bajo</Estado>
+    </Producto>
+    <Producto>
+        <Id>3</Id>
+        <Nombre>Lechuga</Nombre>
+        <Cantidad>25</Cantidad>
+        <Categoria>Granos</Categoria>
+        <UnidadMedida>Kg</UnidadMedida>
+        <FechaRecepcion>13-11-0019</FechaRecepcion>
+        <FechaCaducidad>13-11-0026</FechaCaducidad>
+        <StockMin>20</StockMin>
+        <StockMax>30</StockMax>
+        <Estado>En Stock</Estado>
+    </Producto>
+</Inventario>

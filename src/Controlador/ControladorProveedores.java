@@ -1,9 +1,8 @@
 package Controlador;
 
+import Modelo.BaseDatos;
 import Modelo.Proveedor;
-import ClasesBD.ProveedorDAO;
 import Vista.VistaProveedores;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.DocumentBuilder;
@@ -13,20 +12,15 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +30,7 @@ public class ControladorProveedores {
     private VistaProveedores vista;
     private List<Proveedor> listaProveedores;
     private int idProveedor = 1;
-    private ProveedorDAO proveedorDAO = new ProveedorDAO();
+    private BaseDatos proveedorbd = new BaseDatos();
 
     public ControladorProveedores(VistaProveedores vista) {
         this.vista = vista;
@@ -47,7 +41,7 @@ public class ControladorProveedores {
 
     }
     private void cargarProveedoresDesdeBD() {
-        listaProveedores = proveedorDAO.obtenerTodos(); //  error aqui 
+        listaProveedores = proveedorbd.obtenerTodosProveedores(); //  error aqui 
         // Asegúrate de actualizar el ID automático
         idProveedor = 1;
         for (Proveedor p : listaProveedores) {
@@ -92,7 +86,7 @@ public class ControladorProveedores {
         Proveedor proveedor = obtenerDatosFormulario();
         if (proveedor != null) {
             proveedor.setId(idProveedor++);
-            proveedorDAO.guardar(proveedor);
+            proveedorbd.guardarProveedores(proveedor);
             
             listaProveedores.add(proveedor);
             cargarTablaProveedores(listaProveedores);
@@ -109,7 +103,7 @@ public class ControladorProveedores {
                 proveedorModificado.setId(id);
 
                 listaProveedores.set(fila, proveedorModificado);
-                proveedorDAO.actualizar(proveedorModificado);
+                proveedorbd.actualizarProveedores(proveedorModificado);
                 
                 cargarTablaProveedores(listaProveedores);
                 limpiarFormulario();
@@ -122,7 +116,7 @@ public class ControladorProveedores {
     private void eliminarProveedorDeBD(int id) {
         String sql = "DELETE FROM Proveedores WHERE ID = ?";
 
-        try (Connection conexion = Modelo.ConexionBD.getConexion();
+        try (Connection conexion = Modelo.ConexionBD.obtenerConexion();
              java.sql.PreparedStatement pstmt = conexion.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
@@ -139,7 +133,7 @@ public class ControladorProveedores {
             if (confirmacion == JOptionPane.YES_OPTION) {
                 // Obtener el ID desde la tabla
                 int id = Integer.parseInt(vista.modeloTabla.getValueAt(fila, 0).toString());
-                proveedorDAO.eliminar(id);
+                proveedorbd.eliminarProveedores(id);
                 
                 listaProveedores.remove(fila);
                 cargarTablaProveedores(listaProveedores);
@@ -189,7 +183,6 @@ public class ControladorProveedores {
             cargarTablaProveedores(listaProveedores);
         }
     }
-
     private void reiniciarBusqueda() {
         vista.txtBuscar.setText("");
         vista.comboFiltroTipoProducto.setSelectedIndex(0);
@@ -202,7 +195,6 @@ public class ControladorProveedores {
         if (!carpeta.exists()) {
             carpeta.mkdirs();
         }
-
         // Nombre del archivo con fecha actual
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String fechaActual = sdf.format(new Date());

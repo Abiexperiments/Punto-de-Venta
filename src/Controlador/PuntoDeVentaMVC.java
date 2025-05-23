@@ -18,5 +18,4 @@ public class PuntoDeVentaMVC {
                 e.printStackTrace();
             }
         });
-    }
-}
+    }}

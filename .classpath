@@ -13,7 +13,6 @@
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jgoodies-common-1.2.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/jgoodies-looks-2.4.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/junit-4.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/pdfbox-app-3.0.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/librerias de java/ucanaccess-5.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/itextpdf-5.5.13.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/json-20140107.jar"/>
@@ -21,5 +20,9 @@
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/hsqldb-2.5.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/abiga/OneDrive/Documentos/Librerias para el Punto de Venta/jackcess-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/icepdf-core-7.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/icepdf-viewer-7.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/pdfbox-2.0.34.jar"/>
+	<classpathentry kind="lib" path="C:/Users/abiga/Downloads/fontbox-2.0.34.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,16 +4,23 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionBD {
-	public static Connection getConexion() {
+
+    private static final String URL_ACCESS = "jdbc:ucanaccess://";
+
+    public static Connection conectarUCanAccess(String rutaBD) throws SQLException {
+        String cadenaConexion = URL_ACCESS + rutaBD;
+        System.out.println("Cadena de conexión: " + cadenaConexion);
+        return DriverManager.getConnection(cadenaConexion);
+    }
+
+    public static Connection obtenerConexion() {
         Connection conexion = null;
         try {
-            // Cargar el driver UCanAccess explícitamente
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 
-            String rutaBD = "C:\\Users\\abiga\\OneDrive\\Documentos\\DB Punto de Venta.accdb";
-            String url = "jdbc:ucanaccess://" + rutaBD;
+            String ruta = "C:\\Users\\abiga\\OneDrive\\Documentos\\DB Punto de Venta.accdb";
+            conexion = conectarUCanAccess(ruta);
 
-            conexion = DriverManager.getConnection(url);
             System.out.println("Conexión exitosa a Access.");
         } catch (ClassNotFoundException e) {
             System.out.println("Error: No se encontró el driver UCanAccess.");
@@ -23,6 +30,4 @@ public class ConexionBD {
             e.printStackTrace();
         }
 
-        return conexion;
-    }
-}
+        return conexion;}}

@@ -1,7 +1,7 @@
 package Controlador;
 
 import Modelo.ProductoInventario;
-import ClasesBD.InventarioDAO;
+import Modelo.BaseDatos;
 import Modelo.ConexionBD;
 
 import java.awt.Color;
@@ -191,7 +191,7 @@ public class ControladorInventario {
                         int nuevaCantidad = cantidadDisponible - cantidadDevuelta;
 
                         if (nuevaCantidad <= 0) {
-                            new InventarioDAO().eliminarProducto(id);
+                            new BaseDatos().eliminarProductoInventario(id);
                             ((DefaultTableModel) vista.getTablaInventario().getModel()).removeRow(fila);
                             System.out.println("Producto eliminado por llegar a 0: " + nombre);
                         } else {
@@ -215,7 +215,7 @@ public class ControladorInventario {
                                 Integer.parseInt(vista.getTablaInventario().getValueAt(fila, 8).toString())  // StockMax
                             );
 
-                            new InventarioDAO().modificarProducto(productoActualizado);
+                            new BaseDatos().modificarProductoInventario(productoActualizado);
 
                             // Actualizar la tabla en pantalla
                             vista.getTablaInventario().setValueAt(nuevaCantidad, fila, 2);
@@ -256,7 +256,7 @@ public class ControladorInventario {
 
         vista.getBtnReiniciar().addActionListener(e -> {
             vista.getTxtBuscar().setText("");     // Limpia el campo
-            vista.getTxtBuscar().requestFocus();  // Regresa el foco
+            vista.getTxtBuscar().requestFocus();  
             vista.getTableRowSorter().setRowFilter(null); // Quita filtro
             cargarProductosDesdeBD();             // Recarga la tabla si lo necesitas
 
@@ -283,7 +283,7 @@ public class ControladorInventario {
 
                         String sql = "UPDATE Inventario SET Cantidad=?, StockMin=?, StockMax=?, Estado=? WHERE IdProducto=?";
 
-                        try (Connection conn = ConexionBD.getConexion();
+                        try (Connection conn = ConexionBD.obtenerConexion();
                              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
                             stmt.setInt(1, cantidad);
@@ -346,7 +346,7 @@ public class ControladorInventario {
                 fechaRecepcion, fechaCaducidad, stockMin, stockMax
             );
 
-            InventarioDAO.insertarProducto(producto);
+            BaseDatos.insertarProductoInventario(producto);
             cargarProductosDesdeBD();
             limpiarCampos();
             vista.actualizarTotales();
@@ -365,7 +365,7 @@ public class ControladorInventario {
         modelo.setRowCount(0); // Limpiar tabla
 
         try {
-            List<ProductoInventario> productos = InventarioDAO.cargarProductos();
+            List<ProductoInventario> productos = BaseDatos.cargarProductosInventario();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
             for (ProductoInventario producto : productos) {
@@ -397,7 +397,7 @@ public class ControladorInventario {
         modelo.setRowCount(0);
         
         try {
-            List<ProductoInventario> productos = InventarioDAO.buscarProductos(textoBusqueda);
+            List<ProductoInventario> productos = BaseDatos.buscarProductosInventario(textoBusqueda);
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
             for (ProductoInventario producto : productos) {
@@ -436,7 +436,7 @@ public class ControladorInventario {
         System.out.println("StockMax: " + producto.getStockMax());
         System.out.println("Estado: " + producto.getEstado());
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.obtenerConexion();
              java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, producto.getNombre());
@@ -508,7 +508,7 @@ public class ControladorInventario {
 
             String sql = "UPDATE Inventario SET Nombre=?, Cantidad=?, Categoria=?, UnidadMedida=?, FechaRecepcion=?, FechaCaducidad=?, StockMin=?, StockMax=? WHERE IdProducto=?";
 
-            try (Connection conn = ConexionBD.getConexion();
+            try (Connection conn = ConexionBD.obtenerConexion();
                  PreparedStatement stmt = conn.prepareStatement(sql)) {
 
                 stmt.setString(1, nombre);
@@ -547,7 +547,7 @@ public class ControladorInventario {
 
         String sql = "DELETE FROM Inventario WHERE IdProducto = ?";
 
-        try (Connection conn = ConexionBD.getConexion();
+        try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -576,7 +576,7 @@ public class ControladorInventario {
 
         try {
             // Obtener la lista de productos desde la base de datos
-            List<ProductoInventario> productos = InventarioDAO.cargarProductos();
+            List<ProductoInventario> productos = BaseDatos.cargarProductosInventario();
 
             // Recorrer los productos y agregar las filas en la tabla
             for (ProductoInventario p : productos) {
@@ -650,7 +650,7 @@ public class ControladorInventario {
             writer.println("ID,Nombre,Cantidad,Categoría,Unidad de Medida,Fecha Ingreso,Fecha Caducidad,Stock Mínimo,Stock Máximo,Estado");
 
             // Obtener la lista de productos desde la base de datos
-            List<ProductoInventario> productos = InventarioDAO.cargarProductos();
+            List<ProductoInventario> productos = BaseDatos.cargarProductosInventario();
 
             // Escribir cada producto del inventario
             for (ProductoInventario p : productos) {
@@ -747,7 +747,7 @@ public class ControladorInventario {
             SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy"); // formato para fechas
 
             // Asumo que InventarioDAO.cargarProductos() devuelve List<ProductoInventario>
-            List<ProductoInventario> productos = InventarioDAO.cargarProductos();
+            List<ProductoInventario> productos = BaseDatos.cargarProductosInventario();
 
             for (ProductoInventario p : productos) {
                 JSONObject prodObj = new JSONObject();

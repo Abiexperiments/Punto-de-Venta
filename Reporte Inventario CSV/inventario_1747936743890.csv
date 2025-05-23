@@ -1,0 +1,3 @@
+ID,Nombre,Cantidad,Categoría,Unidad de Medida,Fecha Ingreso,Fecha Caducidad,Stock Mínimo,Stock Máximo,Estado
+1,Pollo,12,Carnes,Kg,2025-05-09,2025-05-16,20,30,Bajo
+3,Lechuga,25,Granos,Kg,0019-11-13,0026-11-13,20,30,En Stock

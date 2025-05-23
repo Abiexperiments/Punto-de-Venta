@@ -161,7 +161,7 @@ public class VistaProveedores extends JPanel {
         btnExportarXML.setIcon(new ImageIcon(getClass().getResource("/Imagenes/xmlicono.png")));
         btnExportarJSON.setIcon(new ImageIcon(getClass().getResource("/Imagenes/jsonicono.png")));
         btnBuscar.setIcon(new ImageIcon(getClass().getResource("/Imagenes/lupa.jpg")));
-        btnBuscar.setIcon(new ImageIcon(getClass().getResource("/Imagenes/reiniciar.png")));
+        btnReiniciar.setIcon(new ImageIcon(getClass().getResource("/Imagenes/reiniciar.png")));
         
         
         panelBotones.add(btnAgregar);

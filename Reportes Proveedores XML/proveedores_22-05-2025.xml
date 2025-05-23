@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<proveedores>
+    <proveedor>
+        <id>1</id>
+        <nombre>Abarrotes San Luis</nombre>
+        <telefono>833456234</telefono>
+        <correo>abarrotessanluis@gmail.com</correo>
+        <calle>San Lucas</calle>
+        <colonia>Ganadera</colonia>
+        <ciudad>Altamira</ciudad>
+        <estado>Tamaulipas</estado>
+        <cp>09897</cp>
+        <tipoProducto>Abarrotes</tipoProducto>
+    </proveedor>
+</proveedores>

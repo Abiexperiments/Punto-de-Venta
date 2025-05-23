@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ventas>
+    <venta>
+        <idVenta>1</idVenta>
+        <productos>Enchiladas x1</productos>
+        <total>35.0</total>
+        <fecha>09/05/2025 07:17</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>2</idVenta>
+        <productos>Enchiladas x1</productos>
+        <total>25.0</total>
+        <fecha>15/05/2025 22:26</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>11</idVenta>
+        <productos>Orden Sopes con Pollo (3)</productos>
+        <total>50.0</total>
+        <fecha>21/05/2025 09:37</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>13</idVenta>
+        <productos>Orden Sopes con Pollo (3)</productos>
+        <total>200.0</total>
+        <fecha>21/05/2025 09:40</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>14</idVenta>
+        <productos>Tamal Verde con Rajas x1, Orden Sopes con Pollo (3) x1, 1 Flan pequeño Napolitano x1</productos>
+        <total>85.0</total>
+        <fecha>21/05/2025 14:03</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>15</idVenta>
+        <productos>Tamal Verde con Rajas, Orden Sopes con Pollo (3), 1 Flan pequeño Napolitano</productos>
+        <total>85.0</total>
+        <fecha>21/05/2025 14:03</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>16</idVenta>
+        <productos>Tamal Verde con Rajas x1, 1 Flan pequeño Napolitano x1</productos>
+        <total>35.0</total>
+        <fecha>21/05/2025 14:30</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>17</idVenta>
+        <productos>Tamal Verde con Rajas, 1 Flan pequeño Napolitano</productos>
+        <total>35.0</total>
+        <fecha>21/05/2025 14:30</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>18</idVenta>
+        <productos>Orden Sopes con Pollo (3) x1, Tamal Verde con Rajas x3</productos>
+        <total>95.0</total>
+        <fecha>21/05/2025 14:42</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>19</idVenta>
+        <productos>Orden Sopes con Pollo (3), Tamal Verde con Rajas</productos>
+        <total>95.0</total>
+        <fecha>21/05/2025 14:42</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>20</idVenta>
+        <productos>Tamal Verde con Rajas x1</productos>
+        <total>15.0</total>
+        <fecha>21/05/2025 14:50</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>21</idVenta>
+        <productos>Tamal Verde con Rajas</productos>
+        <total>15.0</total>
+        <fecha>21/05/2025 14:50</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>22</idVenta>
+        <productos>Tamal Verde con Rajas x1</productos>
+        <total>15.0</total>
+        <fecha>21/05/2025 14:51</fecha>
+        <metodoPago>Efectivo</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>23</idVenta>
+        <productos>1 Flan pequeño Napolitano x1</productos>
+        <total>20.0</total>
+        <fecha>21/05/2025 15:12</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>24</idVenta>
+        <productos>1 Flan pequeño Napolitano</productos>
+        <total>20.0</total>
+        <fecha>21/05/2025 15:12</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>25</idVenta>
+        <productos>1 Flan pequeño Napolitano x1</productos>
+        <total>20.0</total>
+        <fecha>21/05/2025 16:42</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>26</idVenta>
+        <productos>1 Flan pequeño Napolitano</productos>
+        <total>20.0</total>
+        <fecha>21/05/2025 16:42</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>27</idVenta>
+        <productos>Orden Sopes con Pollo (3) x1</productos>
+        <total>50.0</total>
+        <fecha>21/05/2025 16:44</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+    <venta>
+        <idVenta>28</idVenta>
+        <productos>Orden Sopes con Pollo (3)</productos>
+        <total>50.0</total>
+        <fecha>21/05/2025 16:44</fecha>
+        <metodoPago>Tarjeta</metodoPago>
+    </venta>
+</ventas>
